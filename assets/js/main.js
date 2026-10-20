@@ -96,6 +96,7 @@
     if (!burger || !menu) return;
     const set = open => {
       menuOpen = open; menu.classList.toggle('is-open', open); menu.setAttribute('aria-hidden', String(!open)); burger.setAttribute('aria-expanded', String(open));
+      d.classList.toggle('menu-open', open); burger.setAttribute('aria-label', open ? L('Fermer le menu', 'Close menu') : 'Menu');
       if (lenis) open ? lenis.stop() : lenis.start(); else document.body.style.overflow = open ? 'hidden' : '';
       if (open) { const a = menu.querySelector('a'); a && setTimeout(() => a.focus(), 300); } else burger.focus();
     };
@@ -208,7 +209,8 @@
     const c = $('.cursor'); if (!c) return;
     d.classList.add('has-cursor');
     const ring = $('.cursor__ring', c), dot = $('.cursor__dot', c), txt = $('.cursor__txt', c);
-    let x = innerWidth / 2, y = innerHeight / 2, rx = x, ry = y, loupe = null, mode = '';
+    let x = innerWidth / 2, y = innerHeight / 2, rx = x, ry = y, loupe = null, mode = '', seen = false;
+    c.style.opacity = '0';
     const Z = 2.6, SIZE = 190;
     function loupeAt(e) {
       const im = loupe; const r = im.getBoundingClientRect();
@@ -220,7 +222,7 @@
       ring.style.backgroundSize = `${cw * Z}px ${ch * Z}px`;
       ring.style.backgroundPosition = `${-(px * Z - SIZE / 2)}px ${-(py * Z - SIZE / 2)}px`;
     }
-    window.addEventListener('pointermove', e => { x = e.clientX; y = e.clientY; if (loupe) loupeAt(e); }, { passive: true });
+    window.addEventListener('pointermove', e => { x = e.clientX; y = e.clientY; if (!seen) { seen = true; rx = x; ry = y; c.style.opacity = '1'; } if (loupe) loupeAt(e); }, { passive: true });
     G.ticker.add(() => {
       const k = mode === 'loupe' ? 1 : 0.2;
       rx += (x - rx) * k; ry += (y - ry) * k;
@@ -244,7 +246,7 @@
       setMode('');
     });
     document.addEventListener('pointerleave', () => { c.style.opacity = '0'; });
-    document.addEventListener('pointerenter', () => { c.style.opacity = '1'; });
+    document.addEventListener('pointerenter', () => { if (seen) c.style.opacity = '1'; });
     $$('[data-magnetic]').forEach(el => {
       el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(); G.to(el, { x: (e.clientX - r.left - r.width / 2) * 0.22, y: (e.clientY - r.top - r.height / 2) * 0.32, duration: 0.5, ease: 'power3.out' }); });
       el.addEventListener('pointerleave', () => G.to(el, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, .4)' }));
@@ -290,6 +292,8 @@
     const seal = $('.seal', el), l = $('.seal__l', el), r = $('.seal__r', el), crack = $('.seal__crack', el), flap = $('.loader__flap', el), word = $('.loader__word', el);
     const parts = [$('.loader__env', el), $('.loader__side', el), flap];
     const tl = G.timeline({ onComplete: () => el.remove() });
+    const skip = () => { if (tl.progress() < 1) tl.timeScale(4); };
+    ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(ev => window.addEventListener(ev, skip, { once: true, passive: true }));
     if (short) {
       tl.from(seal, { scale: 1.25, opacity: 0, duration: 0.35, ease: 'power2.out' })
         .to(seal, { opacity: 0, scale: 0.9, duration: 0.25 }, '+=0.05')
@@ -330,7 +334,7 @@
     // titres : la frappe typographique
     $$('[data-press]').forEach(h => safe('press', () => {
       const sp = splitPress(h); if (!sp) return;
-      G.from(sp.words, { scrollTrigger: { trigger: h, start: 'top 88%', once: true }, opacity: 0, yPercent: -28, scale: 1.12, rotationX: -55, transformOrigin: '50% 100%', transformPerspective: 600, filter: 'blur(3px)', duration: 1.15, ease: 'expo.out', stagger: { each: 0.07, from: 'start' }, clearProps: 'filter' });
+      G.from(sp.words, { scrollTrigger: { trigger: h, start: 'top 88%', once: true }, opacity: 0, yPercent: -30, scale: 1.1, rotationX: -55, transformOrigin: '50% 100%', transformPerspective: 600, duration: 1.15, ease: 'expo.out', stagger: { each: 0.06, from: 'start' } });
     }));
 
     // blocs qui montent
@@ -414,17 +418,19 @@
       const els = $$('ellipse[data-draw]', tp);
       els.forEach(p => { const len = p.getTotalLength ? p.getTotalLength() : 2200; G.set(p, { strokeDasharray: len, strokeDashoffset: len }); });
       const tl = G.timeline({ scrollTrigger: { trigger: tp, start: 'top 78%', end: 'center 52%', scrub: 1 } });
+      const cloth = $('.tp-cloth', tp);
+      if (cloth) tl.fromTo(cloth, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, ease: 'none', duration: 0.8 }, 0.1);
       tl.to(els, { strokeDashoffset: 0, ease: 'none', duration: 1 }, 0)
         .from($$('.chair', tp), { scale: 0, transformOrigin: '50% 50%', stagger: 0.04, duration: 0.3 }, 0.2)
         .from($$('text', tp), { opacity: 0, y: 10, duration: 0.4 }, 0.5)
         ;
     }
-    if (tp) G.from($$('.place__card', tp), { y: -50, rotation: (i) => [-6, 5, 4, -5][i % 4], opacity: 0, duration: 1.1, ease: 'back.out(1.4)', stagger: 0.14, scrollTrigger: { trigger: tp, start: 'top 75%', once: true } });
+    if (tp) G.from($$('.place__card', tp), { y: -50, rotation: (i) => [-6, 5, 4, -5][i % 4] * (desk ? 1 : 0.4), opacity: 0, duration: 1.1, ease: 'back.out(1.4)', stagger: 0.14, scrollTrigger: { trigger: tp, start: 'top 75%', once: true } });
 
     const sw = $('[data-stack-wrap]');
     if (sw) {
       const items = $$('[data-stack]', sw); const mid = (items.length - 1) / 2;
-      const spread = () => Math.max(24, (sw.clientWidth - items[0].offsetWidth) / (2 * mid) * 0.92);
+      const spread = () => Math.max(20, (sw.clientWidth - items[0].offsetWidth) / (2 * mid) * (desk ? 0.92 : 0.72));
       items.forEach((el, i) => G.set(el, { rotation: [-5, 4, -2, 6, -3][i % 5], zIndex: 10 - Math.abs(i - mid) }));
       const tl = G.timeline({ scrollTrigger: { trigger: sw, start: 'top 80%', end: 'bottom 35%', scrub: 1, invalidateOnRefresh: true } });
       items.forEach((el, i) => tl.to(el, { x: () => (i - mid) * spread(), y: () => Math.abs(i - mid) * 22, rotation: (i - mid) * 7, ease: 'none' }, 0));
@@ -438,7 +444,7 @@
   function hscroll() {
     $$('[data-hs]').forEach(hs => {
       const track = $('.hs__track', hs);
-      if (calm || !hasG || !desk) { hs.classList.add('is-native'); $$('.print[data-dev]', hs).forEach(p => p.classList.add('is-dev')); return; }
+      if (calm || !hasG || !desk) { hs.classList.add('is-native'); const sec = hs.closest('.hs-sec'); sec && sec.classList.add('is-native-sec'); $$('.print[data-dev]', hs).forEach(p => p.classList.add('is-dev')); return; }
       const dist = () => Math.max(0, track.scrollWidth - innerWidth);
       const tween = G.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: hs.closest('.hs-sec') || hs, start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1 } });
       const hp = $$('.print[data-dev]', hs);
@@ -552,7 +558,7 @@
     }
     function open(trigger) {
       if (!el) build();
-      opener = trigger; items = $$(`[data-lb="${trigger.dataset.lb}"]`);
+      opener = trigger; items = $$(`[data-lb="${trigger.dataset.lb}"]`).filter(x => !x.closest('[hidden]'));
       el.classList.add('is-open'); lenis && lenis.stop(); document.body.style.overflow = 'hidden'; window.__osCursorReset && window.__osCursorReset();
       show(items.indexOf(trigger)); setTimeout(() => $('.lb__close', el).focus(), 30);
     }
@@ -560,6 +566,34 @@
     return { open };
   })();
   document.addEventListener('click', e => { const t = e.target.closest('[data-lb]'); if (t) { e.preventDefault(); LB.open(t); } });
+
+  /* ---------- Filtres de la galerie et des réalisations ---------- */
+  safe('filters', () => {
+    $$('[data-filters]').forEach(group => {
+      const grid = $(`[data-filter-grid="${group.dataset.filters}"]`); if (!grid) return;
+      const items = Array.from(grid.children);
+      group.addEventListener('click', e => {
+        const b = e.target.closest('[data-filter]'); if (!b) return;
+        const k = b.dataset.filter;
+        $$('[data-filter]', group).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        const show = items.filter(it => k === 'tout' || it.dataset.cat === k);
+        items.forEach(it => { it.hidden = !show.includes(it); });
+        show.forEach(it => { const p = it.querySelector('.print[data-dev]'); p && p.classList.add('is-dev'); });
+        if (hasG && !calm) G.fromTo(show.slice(0, 16), { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.035, clearProps: 'transform,opacity' });
+        if (hasG) ST.refresh();
+        const top = group.getBoundingClientRect().top;
+        if (top < 0) { const y = top + window.scrollY - 110; lenis ? lenis.scrollTo(y) : window.scrollTo({ top: y }); }
+      });
+    });
+  });
+
+  /* ---------- Filet de progression et retour en haut ---------- */
+  safe('progress', () => {
+    const bar = $('.hdr__progress'); if (!bar) return;
+    const upd = y => { const h = document.documentElement.scrollHeight - innerHeight; bar.style.transform = `scaleX(${h > 0 ? Math.min(1, y / h) : 0})`; };
+    if (lenis) lenis.on('scroll', e => upd(e.scroll)); else window.addEventListener('scroll', () => upd(window.scrollY), { passive: true });
+    document.addEventListener('click', e => { const a = e.target.closest('[data-top]'); if (!a) return; e.preventDefault(); lenis ? lenis.scrollTo(0, { duration: 1.6 }) : window.scrollTo({ top: 0, behavior: calm ? 'auto' : 'smooth' }); const skip = $('#contenu'); });
+  });
 
   /* ---------- Design graphique ---------- */
   function designScenes() {
@@ -579,9 +613,9 @@
     const fold = $('[data-fold]');
     if (fold && desk) {
       const tl = G.timeline({ scrollTrigger: { trigger: fold, start: 'top 85%', end: 'top 35%', scrub: 1 } });
-      tl.fromTo('.fold__l', { rotationY: 62, transformPerspective: 1800 }, { rotationY: 0, ease: 'none' }, 0).fromTo('.fold__r', { rotationY: -62, transformPerspective: 1800 }, { rotationY: 0, ease: 'none' }, 0);
+      tl.fromTo('.fold__l', { rotationY: 38, transformPerspective: 2400, opacity: .4 }, { rotationY: 0, opacity: 1, ease: 'none' }, 0).fromTo('.fold__r', { rotationY: -38, transformPerspective: 2400, opacity: .4 }, { rotationY: 0, opacity: 1, ease: 'none' }, 0);
     }
-    $$('[data-trades]').forEach(tr => G.from($$('.trade', tr), { rotationX: -90, transformOrigin: '50% 100%', transformPerspective: 900, opacity: 0, duration: 1, ease: 'back.out(1.5)', stagger: 0.07, scrollTrigger: { trigger: tr, start: 'top 85%', once: true } }));
+    $$('[data-trades]').forEach(tr => G.from($$('.trade', tr), { y: 40, rotation: (i) => [-3, 2, -2, 3][i % 4], opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.06, scrollTrigger: { trigger: tr, start: 'top 88%', once: true } }));
   }
 
   /* ---------- Agence ---------- */
@@ -606,7 +640,7 @@
   safe('tabs', () => {
     const tl = $('[data-tabs]'); if (!tl) return;
     const tabs = $$('[role="tab"]', tl);
-    const ink = panel => { if (hasG && !calm) G.from($$('[data-ink]', panel), { clipPath: 'inset(0 100% 0 0)', duration: 0.9, ease: 'power2.out', stagger: 0.045 }); };
+    const ink = panel => { if (hasG && !calm) G.fromTo($$('[data-ink]', panel), { clipPath: 'inset(-10% 100% -10% 0)' }, { clipPath: 'inset(-10% 0% -10% 0)', duration: 0.9, ease: 'power2.out', stagger: 0.04, clearProps: 'clipPath' }); };
     const select = (t, focus) => {
       tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; const p = document.getElementById(x.getAttribute('aria-controls')); if (p) p.hidden = !on; });
       if (focus) t.focus(); ink(document.getElementById(t.getAttribute('aria-controls'))); if (hasG) ST.refresh();
@@ -623,8 +657,9 @@
     const cv = $('[data-guilloche]'); if (!cv) return;
     const ctx = cv.getContext('2d'); if (!ctx) return;
     let w = 0, h = 0, dpr = 1, vis = true, lvl = 0;
-    const N = desk ? 26 : 16, STEPS = desk ? 320 : 200;
-    const size = () => { dpr = Math.min(window.devicePixelRatio || 1, 1.6); const r = cv.getBoundingClientRect(); w = r.width; h = r.height; cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); };
+    const N = desk ? 18 : 12, STEPS = desk ? 220 : 160;
+    let last = 0;
+    const size = () => { dpr = Math.min(window.devicePixelRatio || 1, 1.25); const r = cv.getBoundingClientRect(); w = r.width; h = r.height; cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); };
     size(); window.addEventListener('resize', size);
     new IntersectionObserver(es => { vis = es[0].isIntersecting; }).observe(cv);
     const draw = now => {
@@ -639,11 +674,11 @@
           const r = R * (0.58 + 0.16 * k / N) + amp * Math.sin(12 * th + ph) + R * 0.04 * Math.sin(5 * th - ph * 1.3);
           const x = r * Math.cos(th), y = r * Math.sin(th); s ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
         }
-        ctx.strokeStyle = `rgba(230, 210, 159, ${0.12 + 0.2 * (k / N) + lvl * 0.2})`; ctx.lineWidth = 0.8; ctx.stroke();
+        ctx.strokeStyle = `rgba(230, 210, 159, ${0.16 + 0.24 * (k / N) + lvl * 0.2})`; ctx.lineWidth = 0.9; ctx.stroke();
       }
     };
     if (calm) { draw(0); return; }
-    const loop = now => { if (vis) draw(now); requestAnimationFrame(loop); };
+    const loop = now => { if (vis && !document.hidden && now - last > 33) { last = now; draw(now); } requestAnimationFrame(loop); };
     requestAnimationFrame(loop);
   });
 
@@ -722,7 +757,7 @@
   function loadFoil() {
     const els = $$('[data-foil]'); if (!els.length) return Promise.resolve(null);
     els.forEach(el => el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(); el.style.setProperty('--fx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%'); }));
-    return import(BASE + 'foil.mjs').then(m => m.init(els, { calm, lang })).catch(err => { console.warn('[os] foil', err); return null; });
+    return import(BASE + 'foil.mjs?v=3').then(m => m.init(els, { calm, lang })).catch(err => { console.warn('[os] foil', err); return null; });
   }
 
   /* ---------- Démarrage ---------- */

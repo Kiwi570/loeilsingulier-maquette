@@ -1,4 +1,4 @@
-# L'Œil Singulier · maquette v1
+# L'Œil Singulier · maquette v2
 
 Maquette du futur site de L'Œil Singulier (événementiel et design graphique, Paris et Londres).
 Direction artistique « Le Carton d'invitation » : papier coton ivoire, encre bleu nuit, dorure or pâle.
@@ -22,7 +22,7 @@ Site statique HTML, CSS et JavaScript, sans étape de construction, prêt pour V
 
 ## Bibliothèques hébergées avec le site
 
-GSAP 3.15 (ScrollTrigger, SplitText), Lenis 1.3, OGL (dorure WebGL). Polices Bodoni Moda et Hanken Grotesk (SIL Open Font License).
+GSAP 3.15 (ScrollTrigger, SplitText), Lenis 1.3, OGL (dorure WebGL). Polices Bodoni Moda (coupes renforcées pour la lecture) et Hanken Grotesk (SIL Open Font License).
 
 ## Accessibilité et préférences
 

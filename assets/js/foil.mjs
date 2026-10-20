@@ -3,7 +3,17 @@
    lettre par lettre aux positions exactes du DOM, en or froissé pour les mots dorés et en encre gaufrée pour les autres. */
 import { Renderer, Program, Mesh, Texture, Triangle } from './vendor/ogl.min.mjs';
 
-const DPR = Math.min(window.devicePixelRatio || 1, 2);
+const DPR = Math.min(window.devicePixelRatio || 1, 1.75);
+
+// bruit précalculé une fois (texture 256 × 256 répétée) au lieu d'un calcul par pixel à chaque image
+function noiseCanvas() {
+  const N = 256, c = document.createElement('canvas'); c.width = c.height = N; const x = c.getContext('2d');
+  const layer = (cells, alpha) => { const t = document.createElement('canvas'); t.width = t.height = cells; const tx = t.getContext('2d'); const im = tx.createImageData(cells, cells);
+    for (let i = 0; i < im.data.length; i += 4) { im.data[i] = Math.random() * 255; im.data[i + 1] = Math.random() * 255; im.data[i + 2] = Math.random() * 255; im.data[i + 3] = 255; }
+    tx.putImageData(im, 0, 0); x.globalAlpha = alpha; x.imageSmoothingEnabled = true; x.drawImage(t, 0, 0, N, N); x.drawImage(t, -N, 0, N, N); };
+  x.fillStyle = '#808080'; x.fillRect(0, 0, N, N); layer(16, 1); layer(32, .5); layer(64, .25); layer(128, .14);
+  return c;
+}
 
 const vertex = /* glsl */`
 attribute vec2 uv;
@@ -19,11 +29,8 @@ uniform vec2 uRes;
 uniform vec2 uLight;
 uniform float uTime;
 uniform float uReveal;
+uniform sampler2D tNoise;
 varying vec2 vUv;
-float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
-float noise(vec2 p) { vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y); }
-float fbm(vec2 p) { float v = 0.0, a = 0.5; for (int i = 0; i < 4; i++) { v += a * noise(p); p *= 2.03; a *= 0.5; } return v; }
 void main() {
   vec2 uv = vUv;
   vec4 m = texture2D(tMask, uv);
@@ -36,8 +43,8 @@ void main() {
   float hD = texture2D(tHeight, uv - vec2(0.0, px.y * 1.5)).a;
   float hU = texture2D(tHeight, uv + vec2(0.0, px.y * 1.5)).a;
   vec3 n = normalize(vec3((hL - hR) * 3.2, (hD - hU) * 3.2, 1.0));
-  vec2 q = uv * uRes / 24.0;
-  vec3 nf = normalize(n + vec3(fbm(q) - 0.5, fbm(q + 7.3) - 0.5, 0.0) * 0.95);
+  vec4 nz = texture2D(tNoise, uv * uRes / 512.0);
+  vec3 nf = normalize(n + vec3(nz.r - 0.5, nz.g - 0.5, 0.0) * 1.1);
   vec3 L = normalize(vec3((uLight - uv) * vec2(uRes.x / uRes.y, 1.0), 0.55));
   vec3 H = normalize(L + vec3(0.0, 0.0, 1.0));
   float diff = max(dot(nf, L), 0.0);
@@ -46,7 +53,7 @@ void main() {
   vec3 gold = mix(vec3(0.40, 0.29, 0.13), vec3(0.88, 0.74, 0.46), diff) + vec3(1.0, 0.93, 0.74) * spec * 1.3 + vec3(0.22, 0.17, 0.08) * sheen * 0.3;
   float dn = max(dot(n, L), 0.0);
   vec3 ink = vec3(0.078, 0.13, 0.227) * (0.72 + 0.55 * dn) + vec3(0.62, 0.64, 0.72) * pow(max(dot(n, H), 0.0), 40.0) * 0.16;
-  float thr = uv.x * 0.75 + fbm(uv * vec2(6.0, 3.0)) * 0.25;
+  float thr = uv.x * 0.75 + texture2D(tNoise, uv * vec2(0.6, 0.3)).b * 0.25;
   float r = uReveal * 1.1;
   float vis = smoothstep(thr - 0.06, thr, r);
   float flash = smoothstep(thr - 0.14, thr - 0.03, r) * (1.0 - smoothstep(thr - 0.03, thr + 0.02, r - 0.1));
@@ -70,8 +77,9 @@ class Foil {
     this.mask = document.createElement('canvas'); this.height = document.createElement('canvas'); this.small = document.createElement('canvas');
     const texOpts = { generateMipmaps: false, minFilter: gl.LINEAR, magFilter: gl.LINEAR, premultiplyAlpha: false, flipY: true };
     this.tMask = new Texture(gl, texOpts); this.tHeight = new Texture(gl, texOpts);
+    this.tNoise = new Texture(gl, { image: noiseCanvas(), wrapS: gl.REPEAT, wrapT: gl.REPEAT, generateMipmaps: false, minFilter: gl.LINEAR, magFilter: gl.LINEAR });
     this.program = new Program(gl, { vertex, fragment, transparent: true, depthTest: false, uniforms: {
-      tMask: { value: this.tMask }, tHeight: { value: this.tHeight }, uRes: { value: [1, 1] }, uLight: { value: this.light }, uTime: { value: 0 }, uReveal: { value: this.revealV } } });
+      tMask: { value: this.tMask }, tHeight: { value: this.tHeight }, tNoise: { value: this.tNoise }, uRes: { value: [1, 1] }, uLight: { value: this.light }, uTime: { value: 0 }, uReveal: { value: this.revealV } } });
     this.mesh = new Mesh(gl, { geometry: new Triangle(gl), program: this.program });
     el.appendChild(c); this.canvas = c; this.ok = true;
     this.ready = this.redraw().then(() => { el.classList.add('is-gl'); this.render(); });
@@ -120,6 +128,9 @@ class Foil {
     this.render();
   }
   frame(now) {
+    const active = now - this.lastMove < 1200 || (this.revealV > 0 && this.revealV < 1);
+    if (!active && now - (this.lastDraw || 0) < 33) return;
+    this.lastDraw = now;
     const t = now / 1000;
     if (now - this.lastMove > 2500) this.target = [0.5 + 0.55 * Math.cos(t * 0.35), 0.62 + 0.4 * Math.sin(t * 0.47)];
     this.light[0] += (this.target[0] - this.light[0]) * 0.06; this.light[1] += (this.target[1] - this.light[1]) * 0.06;

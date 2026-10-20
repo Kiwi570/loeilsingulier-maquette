@@ -290,28 +290,35 @@
     if (calm || !hasG) { el.remove(); return done(); }
     const short = store.sget('os-seen') === '1'; store.sset('os-seen', '1');
     const seal = $('.seal', el), l = $('.seal__l', el), r = $('.seal__r', el), crack = $('.seal__crack', el), flap = $('.loader__flap', el), word = $('.loader__word', el);
-    const parts = [$('.loader__env', el), $('.loader__side', el), flap];
+    const pkg = $('.loader__pkg', el);
     const tl = G.timeline({ onComplete: () => el.remove() });
-    const skip = () => { if (tl.progress() < 1) tl.timeScale(4); };
+    const skip = () => { if (tl.progress() < 1) tl.timeScale(3); };
     ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(ev => window.addEventListener(ev, skip, { once: true, passive: true }));
     if (short) {
-      tl.from(seal, { scale: 1.25, opacity: 0, duration: 0.35, ease: 'power2.out' })
-        .to(seal, { opacity: 0, scale: 0.9, duration: 0.25 }, '+=0.05')
-        .to(parts, { yPercent: 100, duration: 0.6, ease: 'power3.inOut', stagger: 0.03 }, '-=0.1')
-        .add(done, '-=0.4');
+      tl.from(seal, { scale: 1.2, opacity: 0, duration: 0.35, ease: 'power2.out' })
+        .to(seal, { scale: 0.92, opacity: 0, duration: 0.25, ease: 'power2.in' }, '+=0.1')
+        .to(pkg, { yPercent: 100, duration: 0.75, ease: 'power3.inOut' }, '-=0.05')
+        .add(done, '-=0.5');
       return;
     }
+    // 1. l'invitation apparaît, le cachet se pose
     tl.from(word, { opacity: 0, y: 12, duration: 0.6, ease: 'power2.out' }, 0.1)
       .from(seal, { scale: 1.5, opacity: 0, rotation: -14, duration: 0.6, ease: 'back.out(1.6)' }, 0.1)
+    // 2. le cachet se fend puis ses deux moitiés tombent
+      .fromTo(crack, { strokeDasharray: 120, strokeDashoffset: 120 }, { strokeDashoffset: 0, duration: 0.28, ease: 'power2.in' }, 0.74)
       .to(crack, { attr: { 'stroke-opacity': 1 }, duration: 0.12 }, 0.78)
       .set($('.seal__whole', el), { opacity: 0 }, 0.8)
-      .fromTo(crack, { strokeDasharray: 120, strokeDashoffset: 120 }, { strokeDashoffset: 0, duration: 0.28, ease: 'power2.in' }, 0.74)
-      .to(l, { rotation: -22, x: -26, y: 36, opacity: 0, svgOrigin: '0 40', duration: 0.7, ease: 'power2.in' }, 1.05)
-      .to(r, { rotation: 22, x: 26, y: 42, opacity: 0, svgOrigin: '0 40', duration: 0.7, ease: 'power2.in' }, 1.05)
-      .to(crack, { opacity: 0, duration: 0.2 }, 1.05)
-      .to(word, { opacity: 0, duration: 0.3 }, 1.1)
-      .to(flap, { rotationX: 178, transformPerspective: 1600, duration: 0.85, ease: 'power3.inOut' }, 1.1)
-      .to(parts, { yPercent: 100, duration: 0.8, ease: 'power3.inOut', stagger: 0.04 }, 1.75)
+      .to(crack, { opacity: 0, duration: 0.15 }, 1.0)
+      .to(l, { rotation: -38, x: -46, y: 460, svgOrigin: '0 40', duration: 0.8, ease: 'power2.in' }, 1.0)
+      .to(r, { rotation: 34, x: 40, y: 480, svgOrigin: '0 40', duration: 0.84, ease: 'power2.in' }, 1.03)
+      .to(word, { opacity: 0, y: -8, duration: 0.35 }, 1.0)
+    // 3. le rabat se replie vers le haut, à plat (sans effet de loupe), et révèle la doublure bleu nuit
+      .to(flap, { scaleY: -1, transformOrigin: '50% 0%', duration: 0.8, ease: 'power3.inOut' }, 1.05)
+      .to(flap, { '--shade': 1, duration: 0.4, ease: 'power1.in' }, 1.05)
+      .to(flap, { '--shade': 0, duration: 0.4, ease: 'power1.out' }, 1.45)
+      .set(flap, { autoAlpha: 0 }, 1.86)
+    // 4. l'enveloppe entière glisse d'un seul bloc et laisse le carton (la page)
+      .to(pkg, { yPercent: 100, duration: 1, ease: 'power3.inOut' }, 1.8)
       .add(done, 1.95);
   }
 

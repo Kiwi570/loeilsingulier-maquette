@@ -1,4 +1,4 @@
-# L'Œil Singulier · maquette v2
+# L'Œil Singulier · maquette v3
 
 Maquette du futur site de L'Œil Singulier (événementiel et design graphique, Paris et Londres).
 Direction artistique « Le Carton d'invitation » : papier coton ivoire, encre bleu nuit, dorure or pâle.

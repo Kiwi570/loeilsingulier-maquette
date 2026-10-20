@@ -217,15 +217,18 @@ h1, h2, h3, h4 { margin: 0; font-weight: 400; text-wrap: balance; }
 .liner { background-color: var(--navy); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'><g fill='none' stroke='%23A8874B' stroke-opacity='.22' stroke-width='.8'><path d='M28 6 L50 28 L28 50 L6 28 Z'/><path d='M28 18 C33 24 33 32 28 38 C23 32 23 24 28 18 Z'/><circle cx='28' cy='28' r='2.2'/></g></svg>"); }
 
 /* ---------- Ouverture : décachetage ---------- */
-.loader { position: fixed; inset: 0; z-index: 150; pointer-events: none; perspective: 1600px; }
+.loader { position: fixed; inset: 0; z-index: 150; pointer-events: none; --flap: 58%; }
+@media (max-aspect-ratio: 4/5) { .loader { --flap: 38%; } }
+.loader__pkg { position: absolute; inset: 0; will-change: transform; box-shadow: 0 -30px 70px -12px rgba(20,33,58,.32); }
 .loader__env { position: absolute; inset: 0; background: var(--paper-2); }
 .loader__liner { position: absolute; inset: 0; }
 .loader__flap {
-  position: absolute; left: 0; right: 0; top: 0; height: 58%; transform-origin: 50% 0; z-index: 3;
+  position: absolute; left: 0; right: 0; top: 0; height: var(--flap); transform-origin: 50% 0; z-index: 3;
   background: linear-gradient(180deg, #e9e0cf 0%, #ddd3bf 92%, #cfc3ab 100%); clip-path: polygon(0 0, 100% 0, 50% 100%); will-change: transform;
 }
-.loader__side { position: absolute; inset: 0; z-index: 2; background: linear-gradient(90deg, #e4dbc8 0%, #ebe3d3 50%, #e2d8c4 100%); clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%); }
-.seal { position: absolute; left: 50%; top: 58%; width: clamp(92px, 12vw, 132px); aspect-ratio: 1; transform: translate(-50%, -50%); z-index: 5; }
+.loader__flap::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,33,58,.05), rgba(20,33,58,.35)); opacity: var(--shade, 0); }
+.loader__side { position: absolute; inset: 0; z-index: 2; background: linear-gradient(90deg, #e4dbc8 0%, #ebe3d3 50%, #e2d8c4 100%); clip-path: polygon(0 0, 50% calc(var(--flap) - 6%), 100% 0, 100% 100%, 0 100%); }
+.seal { position: absolute; left: 50%; top: var(--flap); width: clamp(92px, 12vw, 132px); aspect-ratio: 1; transform: translate(-50%, -50%); z-index: 5; }
 .seal__half { position: absolute; inset: 0; }
 .seal svg { width: 100%; height: 100%; overflow: visible; }
 .loader__word { position: absolute; left: 0; right: 0; bottom: 11%; text-align: center; z-index: 4; font-family: var(--f-serif); font-style: italic; color: var(--ink-2); font-size: 1rem; letter-spacing: .04em; }

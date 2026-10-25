@@ -2,12 +2,12 @@
    Mise en page : une feuille de papier coton posée sur la table ; chaque section est un carton,
    une enveloppe ou un tirage. Une seule ambiance, volontairement claire (papeterie), sans thème sombre. */
 
-@font-face { font-family: "OS Bodoni Display"; src: url("../fonts/bodoni-display-v2.woff") format("woff"); font-weight: 400 500; font-style: normal; font-display: swap; }
-@font-face { font-family: "OS Bodoni Display"; src: url("../fonts/bodoni-display-italic-v2.woff") format("woff"); font-weight: 400 500; font-style: italic; font-display: swap; }
-@font-face { font-family: "OS Bodoni"; src: url("../fonts/bodoni-text-v2.woff") format("woff"); font-weight: 400 600; font-style: normal; font-display: swap; }
-@font-face { font-family: "OS Bodoni"; src: url("../fonts/bodoni-text-italic-v2.woff") format("woff"); font-weight: 400 600; font-style: italic; font-display: swap; }
-@font-face { font-family: "OS Hanken"; src: url("../fonts/hanken-grotesk.woff") format("woff"); font-weight: 100 900; font-style: normal; font-display: swap; }
-@font-face { font-family: "OS Hanken"; src: url("../fonts/hanken-grotesk-italic.woff") format("woff"); font-weight: 100 900; font-style: italic; font-display: swap; }
+@font-face { font-family: "OS Bodoni Display"; src: url("../fonts/bodoni-display-v2.woff2") format("woff2"); font-weight: 400 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "OS Bodoni Display"; src: url("../fonts/bodoni-display-italic-v2.woff2") format("woff2"); font-weight: 400 500; font-style: italic; font-display: swap; }
+@font-face { font-family: "OS Bodoni"; src: url("../fonts/bodoni-text-v2.woff2") format("woff2"); font-weight: 400 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "OS Bodoni"; src: url("../fonts/bodoni-text-italic-v2.woff2") format("woff2"); font-weight: 400 600; font-style: italic; font-display: swap; }
+@font-face { font-family: "OS Hanken"; src: url("../fonts/hanken-grotesk.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "OS Hanken"; src: url("../fonts/hanken-grotesk-italic.woff2") format("woff2"); font-weight: 100 900; font-style: italic; font-display: swap; }
 
 :root {
   color-scheme: light;
@@ -149,7 +149,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 400; text-wrap: balance; }
 .btn:hover { --b: #0b1428; }
 .btn--ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--line-strong), inset 0 0 0 4px transparent, inset 0 0 0 5px var(--line-gold); }
 .btn--ghost:hover { background: var(--card); }
-.btn--gold { color: var(--ink); background: var(--gold-grad); background-size: 220% 100%; box-shadow: inset 0 0 0 1px rgba(108,82,40,.5); }
+.btn--gold { color: var(--ink); background: linear-gradient(100deg, #c9a965, #f2e2b2 40%, #d2b477 70%, #f0dfae); background-size: 160% 100%; box-shadow: inset 0 0 0 1px rgba(108,82,40,.5); }
 .btn--gold:hover { background-position: 100% 0; }
 .btn .arr { width: 22px; height: 10px; flex: none; }
 .btn-row { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
@@ -189,7 +189,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 400; text-wrap: balance; }
 .tool .bars i:nth-child(2) { animation-delay: -.3s; } .tool .bars i:nth-child(3) { animation-delay: -.6s; }
 @keyframes bar { to { transform: scaleY(1); } }
 .lang-sw b { font-weight: 700; color: var(--ink); }
-.lang-sw span { opacity: .45; }
+.lang-sw span { color: var(--ink-3); }
 .hdr__cta { min-height: 40px; padding: .6em 1.2em; font-size: .98rem; }
 .burger { display: none; }
 @media (max-width: 1180px) {
@@ -205,7 +205,7 @@ h1, h2, h3, h4 { margin: 0; font-weight: 400; text-wrap: balance; }
 /* menu mobile : un carton qui glisse hors de l'enveloppe */
 .menu {
   position: fixed; inset: 0; z-index: 69; background: var(--navy); color: var(--on-navy);
-  display: flex; flex-direction: column; justify-content: center;
+  display: flex; flex-direction: column; justify-content: safe center; overflow-y: auto; overscroll-behavior: contain;
   padding: calc(var(--header-h) + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) calc(32px + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
   clip-path: inset(0 0 100% 0); visibility: hidden; transition: clip-path .7s var(--ease), visibility 0s .7s;
 }
@@ -390,7 +390,9 @@ h1, h2, h3, h4 { margin: 0; font-weight: 400; text-wrap: balance; }
 }
 
 /* ---------- Galerie horizontale ---------- */
-.hs { position: relative; overflow: hidden; }
+.hs { position: relative; overflow-x: auto; }
+/* piste défilable par défaut (sans JS) ; le script la fige quand l'épinglage horizontal est créé */
+html.js .hs:not(.is-native) { overflow: hidden; }
 .hs__track { display: flex; gap: clamp(14px, 2vw, 32px); align-items: center; width: max-content; padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px)); }
 .hs__item { flex: none; width: clamp(240px, 28vw, 420px); }
 .hs__item:nth-child(3n+2) { width: clamp(260px, 34vw, 520px); }
@@ -476,7 +478,9 @@ h1, h2, h3, h4 { margin: 0; font-weight: 400; text-wrap: balance; }
 
 /* ---------- Pied de page ---------- */
 .ftr { background: var(--paper-2); padding-top: clamp(56px, 7vw, 100px); padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); position: relative; }
-.ftr__grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 36px; }
+.ftr__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+@media (min-width: 1200px) { .ftr__grid { grid-template-columns: 1.3fr 1fr 1fr 1fr; } }
+.copy-row .sel { overflow-wrap: anywhere; }
 .ftr__logo { width: 170px; }
 .ftr h3 { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-ink); font-weight: 600; margin-bottom: 14px; font-family: var(--f-sans); }
 .ftr ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
@@ -778,3 +782,34 @@ input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius
 .only-mob { display: none; }
 @media (max-width: 760px) { .only-desk { display: none; } .only-mob { display: block; } }
 /* deckle:end */
+
+/* ---------- Finitions (audit) ---------- */
+/* ouverture : seulement avec JavaScript et hors mode calme ; retirée par le filet du <head> si le script ne la prend pas en charge */
+.loader { display: none; }
+html.js[data-calm="0"]:not(.sans-loader) .loader { display: block; }
+/* menu : la page ne défile plus derrière ; resserré en paysage */
+@media (max-height: 520px) { .menu a { font-size: clamp(1.5rem, 6vh, 2rem); } }
+/* bandeau des références : pause aussi au focus clavier */
+.marquee:focus-within .marquee__in { animation-play-state: paused; }
+/* coordonnées devenues liens : même dessin */
+a.sel { color: inherit; text-decoration: none; }
+/* cibles tactiles : 44 px */
+.tool { height: 44px; min-width: 44px; border-radius: 22px; }
+.copy, .flip-btn, .tab { min-height: 44px; }
+/* hauteurs iOS (barre d'outils) */
+.son-hero { min-height: min(88svh, 900px); }
+.lost { min-height: 92svh; }
+@media (max-width: 760px) { .son-hero__bg::after { background: rgba(15,26,48,.82); } }
+/* liste des supports : pas de chevauchement à 320 px */
+@media (max-width: 400px) { .supports a { grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; } }
+.menu__foot a { color: inherit; text-decoration: none; }
+.hero__meta sup { letter-spacing: 0; margin-left: .05em; } /* « 11e » sans espace parasite */
+/* très petits écrans : le bouton Menu (seule navigation) restait hors écran sous 360 px */
+@media (max-width: 400px) {
+  .hdr__in { gap: 8px; }
+  .hdr__logo { width: 96px; }
+  .hdr__tools { gap: 2px; }
+  .lang-sw { font-size: 0; padding: 0 8px; }
+  .lang-sw b { display: none; }
+  .lang-sw span { font-size: .74rem; }
+}

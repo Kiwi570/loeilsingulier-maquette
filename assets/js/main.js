@@ -44,7 +44,7 @@
     $$('[data-aria-en]').forEach(el => { if (el.dataset.ariaFr === undefined) el.dataset.ariaFr = el.getAttribute('aria-label') || ''; el.setAttribute('aria-label', l === 'en' ? el.dataset.ariaEn : el.dataset.ariaFr); });
     $$('[data-ph-en]').forEach(el => { if (el.dataset.phFr === undefined) el.dataset.phFr = el.getAttribute('placeholder') || ''; el.setAttribute('placeholder', l === 'en' ? el.dataset.phEn : el.dataset.phFr); });
     document.title = l === 'en' ? titleEn : titleFr;
-    $$('.js-lang').forEach(b => { b.innerHTML = l === 'en' ? '<span>FR</span>/<b>EN</b>' : '<b>FR</b>/<span>EN</span>'; b.setAttribute('aria-label', l === 'en' ? 'Passer en français' : 'Switch to English'); });
+    $$('.js-lang').forEach(b => { b.innerHTML = l === 'en' ? '<span>FR</span>/<b>EN</b>' : '<b>FR</b>/<span>EN</span>'; b.setAttribute('aria-label', l === 'en' ? 'FR/EN, passer en français' : 'FR/EN, switch to English'); });
   }
   safe('lang', () => {
     applyLang(lang());
@@ -69,8 +69,8 @@
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-copy]'); if (!b) return;
     const val = b.dataset.copy;
-    const sel = () => { const s = b.parentElement && b.parentElement.querySelector('.sel'); if (s) { const r = document.createRange(); r.selectNodeContents(s); const w = getSelection(); w.removeAllRanges(); w.addRange(r); } toast(L('Texte sélectionné : copiez-le avec ⌘C ou Ctrl+C', 'Text selected: copy it with ⌘C or Ctrl+C')); };
-    try { navigator.clipboard.writeText(val).then(() => toast(L('Copié : ', 'Copied: ') + val), sel); } catch (err) { sel(); }
+    const sel = () => { const s = b.parentElement && b.parentElement.querySelector('.sel'); if (s) { const r = document.createRange(); r.selectNodeContents(s); const w = getSelection(); w.removeAllRanges(); w.addRange(r); } toast(L('Texte sélectionné : copiez-le avec ⌘C ou Ctrl+C', 'Text selected: copy it with ⌘C or Ctrl+C')); };
+    try { navigator.clipboard.writeText(val).then(() => toast(L('Copié : ', 'Copied: ') + val), sel); } catch (err) { sel(); }
   });
 
   /* ---------- Défilement fluide ---------- */
@@ -94,14 +94,25 @@
     hdr.addEventListener('focusin', () => hdr.classList.remove('is-hidden'));
     const burger = $('.js-burger'), menu = $('#menu');
     if (!burger || !menu) return;
+    menu.setAttribute('data-lenis-prevent', '');
     const set = open => {
+      $$('body > main, body > footer, body > .skip').forEach(x => { x.inert = open; });
       menuOpen = open; menu.classList.toggle('is-open', open); menu.setAttribute('aria-hidden', String(!open)); burger.setAttribute('aria-expanded', String(open));
       d.classList.toggle('menu-open', open); burger.setAttribute('aria-label', open ? L('Fermer le menu', 'Close menu') : 'Menu');
       if (lenis) open ? lenis.stop() : lenis.start(); else document.body.style.overflow = open ? 'hidden' : '';
       if (open) { const a = menu.querySelector('a'); a && setTimeout(() => a.focus(), 300); } else burger.focus();
     };
     burger.addEventListener('click', () => set(!menuOpen));
-    document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOpen) set(false); });
+    document.addEventListener('keydown', e => {
+      if (!menuOpen) return;
+      if (e.key === 'Escape') { set(false); return; }
+      if (e.key !== 'Tab') return;
+      const f = [burger, ...$$('a[href], button:not([disabled])', menu)];
+      const i = f.indexOf(document.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+    });
+    window.addEventListener('pageshow', e => { if (e.persisted && menuOpen) set(false); });
   });
 
   /* ---------- Son : ambiance composée en direct ---------- */
@@ -163,7 +174,7 @@
       const pressed = on || pending;
       $$('.js-sound').forEach(b => {
         b.setAttribute('aria-pressed', String(pressed));
-        if (b.classList.contains('tool')) b.setAttribute('aria-label', pressed ? L('Couper l’ambiance sonore', 'Turn off the ambient sound') : L('Activer l’ambiance sonore', 'Turn on the ambient sound'));
+        if (b.classList.contains('tool')) b.setAttribute('aria-label', pressed ? L('Son, couper l’ambiance sonore', 'Sound, turn off the ambient sound') : L('Son, activer l’ambiance sonore', 'Sound, turn on the ambient sound'));
         const ip = b.querySelector('.i-play'), ipa = b.querySelector('.i-pause'), off = b.querySelector('.ps-off'), onl = b.querySelector('.ps-on');
         if (ip) { ip.style.display = pressed ? 'none' : ''; ipa.style.display = pressed ? '' : 'none'; off.style.display = pressed ? 'none' : ''; onl.style.display = pressed ? '' : 'none'; }
       });
@@ -272,7 +283,11 @@
       if (!href || href.startsWith('#') || /^(mailto|tel|sms|javascript):/i.test(href)) return;
       let url; try { url = new URL(a.href, location.href); } catch (err) { return; }
       if (url.origin !== location.origin) return;
-      if (url.pathname === location.pathname && url.hash) return;
+      const norm = p => p.replace(/\/index(\.html)?$/, '/').replace(/\.html$/, '');
+      if (norm(url.pathname) === norm(location.pathname) && url.search === location.search) {
+        if (url.hash) { if (url.pathname !== location.pathname) { e.preventDefault(); history.replaceState(null, '', url.hash); const t = document.getElementById(decodeURIComponent(url.hash.slice(1))); if (t) (lenis ? lenis.scrollTo(t) : t.scrollIntoView()); } return; }
+        e.preventDefault(); lenis ? lenis.scrollTo(0) : window.scrollTo(0, 0); return;
+      }
       if (calm) return;
       e.preventDefault();
       store.sset('os-trans', '1');
@@ -285,6 +300,7 @@
 
   /* ---------- Ouverture : le cachet se brise, l'enveloppe s'ouvre ---------- */
   function runLoader(done) {
+    window.__osLoader = true;
     const el = $('.loader');
     if (!el) return done();
     if (calm || !hasG) { el.remove(); return done(); }
@@ -326,7 +342,7 @@
   function splitPress(h) {
     if (!window.SplitText) return null;
     const parts = $$('.l-fr, .l-en', h); const els = parts.length ? parts : [h];
-    return new window.SplitText(els, { type: 'words', wordsClass: 'wd' });
+    return new window.SplitText(els, { type: 'words', wordsClass: 'wd', aria: 'none' }); // découpage en mots : le texte reste lu tel quel
   }
   function reveals() {
     const prints = $$('.print[data-dev]');
@@ -368,7 +384,8 @@
     // numéroteur
     $$('[data-count]').forEach(el => safe('count', () => {
       const n = el.dataset.count; const digits = n.split('');
-      el.setAttribute('aria-label', n); el.textContent = '';
+      el.textContent = '';
+      const sr = document.createElement('span'); sr.className = 'sr-only'; sr.textContent = n; el.appendChild(sr);
       const wheels = digits.map(ch => {
         const w = document.createElement('span'); w.className = 'wheel'; w.setAttribute('aria-hidden', 'true');
         const inn = document.createElement('span'); inn.className = 'wheel__in';
@@ -451,7 +468,7 @@
   function hscroll() {
     $$('[data-hs]').forEach(hs => {
       const track = $('.hs__track', hs);
-      if (calm || !hasG || !desk) { hs.classList.add('is-native'); const sec = hs.closest('.hs-sec'); sec && sec.classList.add('is-native-sec'); $$('.print[data-dev]', hs).forEach(p => p.classList.add('is-dev')); return; }
+      if (calm || !hasG || !desk) { hs.classList.add('is-native'); if (!hs.querySelector('a, button')) { hs.tabIndex = 0; hs.setAttribute('role', 'region'); const h2 = hs.closest('section')?.querySelector('h2'); if (h2) { h2.id = h2.id || 'hs-titre-' + Math.random().toString(36).slice(2, 7); hs.setAttribute('aria-labelledby', h2.id); } } const sec = hs.closest('.hs-sec'); sec && sec.classList.add('is-native-sec'); $$('.print[data-dev]', hs).forEach(p => p.classList.add('is-dev')); return; }
       const dist = () => Math.max(0, track.scrollWidth - innerWidth);
       const tween = G.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: hs.closest('.hs-sec') || hs, start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1 } });
       const hp = $$('.print[data-dev]', hs);
@@ -490,7 +507,7 @@
     const mk = (tag, a, parent) => { const e = document.createElementNS(NS, tag); for (const n in a) e.setAttribute(n, a[n]); parent && parent.appendChild(e); return e; };
     const hav = (a, b) => { const R = 6371, t = x => x * Math.PI / 180; const dl = t(b.lat - a.lat), dn = t(b.lon - a.lon); const h = Math.sin(dl / 2) ** 2 + Math.cos(t(a.lat)) * Math.cos(t(b.lat)) * Math.sin(dn / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); };
     const km = Math.round(hav(cities[0], cities[1]));
-    const setDist = () => $$('[data-distance]').forEach(el => { el.textContent = L(`Paris ⇄ Londres : ${km} km à vol d’oiseau, une heure de décalage. Méridiens de Greenwich et de Paris tracés en or.`, `Paris ⇄ London: ${km} km as the crow flies, one hour apart. The Greenwich and Paris meridians are drawn in gold.`); });
+    const setDist = () => $$('[data-distance]').forEach(el => { el.textContent = L(`Paris ⇄ Londres : ${km} km à vol d’oiseau, une heure de décalage. Méridiens de Greenwich et de Paris tracés en or.`, `Paris ⇄ London: ${km} km as the crow flies, one hour apart. The Greenwich and Paris meridians are drawn in gold.`); });
     setDist(); document.addEventListener('os:lang', setDist);
     maps.forEach(map => {
       const layer = $('[data-map-layer]', map); if (!layer) return;
@@ -706,7 +723,7 @@
         const miss = ['#b-prenom', '#b-nom'].filter(s => !$(s, f).value.trim());
         const mail = $('#b-mail', f).value.trim();
         if (miss.length) { err(4, L('Indiquez votre prénom et votre nom.', 'Please enter your first and last name.')); $(miss[0], f).focus(); return false; }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) { err(4, L('Vérifiez l’adresse e-mail : il manque sans doute le @ ou le domaine.', 'Check the email address: the @ or the domain is probably missing.')); $('#b-mail', f).focus(); return false; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) { err(4, L('Vérifiez l’adresse e-mail : il manque sans doute le @ ou le domaine.', 'Check the email address: the @ or the domain is probably missing.')); $('#b-mail', f).focus(); return false; }
         if (!$('#b-ok', f).checked) { err(4, L('Cochez la case d’accord pour envoyer votre demande.', 'Tick the consent box to send your request.')); return false; }
       }
       err(n, ''); return true;
@@ -727,7 +744,7 @@
     prev.addEventListener('click', () => go(cur - 1));
     f.addEventListener('change', e => { if (e.target.name === 'objectif') err(1, ''); if (e.target.name === 'ville') err(3, ''); });
     const h = (location.hash || '').slice(1);
-    if (h) { const r = f.querySelector(`input[name="objectif"][value="${h}"]`); if (r) r.checked = true; if (h === 'graphisme') $('#b-graph', f).checked = true; }
+    if (h) { const r = $$('input[name="objectif"]', f).find(x => x.value === h); if (r) r.checked = true; if (h === 'graphisme') $('#b-graph', f).checked = true; }
     go(1);
     const label = inp => L(inp.dataset.labelFr, inp.dataset.labelEn);
     f.addEventListener('submit', e => {
@@ -744,7 +761,7 @@
       const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
       sent.innerHTML = `<div class="env-anim" aria-hidden="true"><svg viewBox="0 0 320 200" width="100%"><rect x="10" y="40" width="300" height="150" fill="#E5DCCA" stroke="#A8874B" stroke-width="1"/><path class="ea-card" d="M40 60h240v110H40z" fill="#F8F3E9" stroke="#A8874B" stroke-opacity=".5"/><path d="M10 190L160 100 310 190" fill="#DDD3BF" stroke="#A8874B" stroke-width="1"/><path class="ea-flap" d="M10 40L160 130 310 40z" fill="#E9E0CF" stroke="#A8874B" stroke-width="1"/><g class="ea-seal" transform="translate(160 128)"><circle r="20" fill="#1D2D54"/><circle r="15" fill="none" stroke="#E6D29F" stroke-width="1"/><text y="7" text-anchor="middle" font-family="OS Bodoni Display, Didot, serif" font-style="italic" font-size="20" fill="#E6D29F">Œ</text></g></svg></div>
 <h2 class="h3">${L('Votre carton-réponse est prêt', 'Your reply card is ready')}</h2>
-<p class="small" style="margin:0;max-width:44ch">${L('Dans le site final, il serait transmis à Elena Deliot, qui vous rappelle pour en parler. Ici, rien n’a été envoyé : c’est une maquette.', 'On the final site, it would be sent to Elena Deliot, who would call you back. Here nothing has been sent: this is a mock-up.')}</p>
+<p class="small" style="margin:0;max-width:44ch">${L('Dans le site final, il serait transmis à Elena Deliot, qui vous rappelle pour en parler. Ici, rien n’a été envoyé : c’est une maquette.', 'On the final site, it would be sent to Elena Deliot, who would call you back. Here nothing has been sent: this is a mock-up.')}</p>
 <dl class="recap">${rows.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
 <button class="btn btn--ghost" type="button" data-again>${L('Remplir un nouveau carton', 'Fill in a new card')}</button>`;
       $('[data-steps]', f).hidden = true; $('.reply__nav', f).hidden = true; $('.reply__top .progress', f).style.visibility = 'hidden'; lab.textContent = '';

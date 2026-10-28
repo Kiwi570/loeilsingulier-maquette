@@ -92,6 +92,9 @@
     if (lenis) lenis.on('scroll', e => on(e.scroll)); else window.addEventListener('scroll', () => on(window.scrollY), { passive: true });
     on(window.scrollY);
     hdr.addEventListener('focusin', () => hdr.classList.remove('is-hidden'));
+    /* hauteur réelle de l'en-tête (encoche comprise), pour les sections qui tiennent dans l'écran */
+    const mesure = () => d.style.setProperty('--entete-h', (hdr.offsetTop + hdr.offsetHeight) + 'px');
+    mesure(); if (window.ResizeObserver) new ResizeObserver(mesure).observe(hdr); else window.addEventListener('resize', mesure);
     const burger = $('.js-burger'), menu = $('#menu');
     if (!burger || !menu) return;
     menu.setAttribute('data-lenis-prevent', '');
@@ -469,12 +472,42 @@
     $$('[data-hs]').forEach(hs => {
       const track = $('.hs__track', hs);
       if (calm || !hasG || !desk) { hs.classList.add('is-native'); if (!hs.querySelector('a, button')) { hs.tabIndex = 0; hs.setAttribute('role', 'region'); const h2 = hs.closest('section')?.querySelector('h2'); if (h2) { h2.id = h2.id || 'hs-titre-' + Math.random().toString(36).slice(2, 7); hs.setAttribute('aria-labelledby', h2.id); } } const sec = hs.closest('.hs-sec'); sec && sec.classList.add('is-native-sec'); $$('.print[data-dev]', hs).forEach(p => p.classList.add('is-dev')); return; }
+      const sec = hs.closest('.hs-sec') || hs;
+      /* la section tient dans l'écran : hauteur de piste, légende et parallaxe mesurées, puis cartes bornées en CSS */
+      sec.classList.add('is-pin');
+      const amp = () => (innerHeight < 800 ? 16 : 40);
+      let fH = 0;
+      const mesure = () => {
+        sec.style.setProperty('--hs-amp', amp() + 'px');
+        sec.style.setProperty('--hs-cap', Math.max(0, ...$$('.cap', hs).map(c => c.offsetHeight + (parseFloat(getComputedStyle(c).marginTop) || 0))) + 'px');
+        const h = hs.clientHeight; if (h === fH) return; fH = h;
+        sec.style.setProperty('--hs-h', h + 'px');
+      };
+      mesure();
+      if (window.ResizeObserver) new ResizeObserver(() => { const h = fH; mesure(); if (fH !== h) requestAnimationFrame(() => ST.refresh()); }).observe(hs);
       const dist = () => Math.max(0, track.scrollWidth - innerWidth);
-      const tween = G.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: hs.closest('.hs-sec') || hs, start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1 } });
+      const tween = G.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: sec, start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true } });
       const hp = $$('.print[data-dev]', hs);
       ST.create({ trigger: hs, start: 'top 85%', once: true, onEnter: () => hp.forEach((p, k) => setTimeout(() => (p._develop ? p._develop() : p.classList.add('is-dev')), k * 140)) });
-      $$('.hs__item', hs).forEach((it, i) => G.fromTo(it, { y: i % 2 ? 40 : -20 }, { y: i % 2 ? -40 : 20, ease: 'none', scrollTrigger: { trigger: it, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true } }));
+      $$('.hs__item', hs).forEach((it, i) => G.fromTo(it, { y: () => (i % 2 ? amp() : -amp() / 2) }, { y: () => (i % 2 ? -amp() : amp() / 2), ease: 'none', scrollTrigger: { trigger: it, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true } }));
     });
+  }
+
+  /* ---------- Barre d'actions du bas (téléphone) ---------- */
+  function mbar() {
+    const bar = $('[data-mbar]'); if (!bar) return;
+    document.body.classList.add('has-mbar');
+    const mesure = () => d.style.setProperty('--barres-h', bar.offsetHeight + 'px');
+    mesure(); if (window.ResizeObserver) new ResizeObserver(mesure).observe(bar);
+    if (!window.IntersectionObserver) return;
+    const hero = $('main > section');
+    const caches = $$('form, .rsvp, .ftr');
+    const vus = new Set(); let heroVu = true;
+    const maj = () => { const on = !heroVu && !vus.size; bar.classList.toggle('is-on', on); bar.inert = !on; };
+    if (hero) new IntersectionObserver(es => es.forEach(e => { heroVu = e.isIntersecting; maj(); })).observe(hero); else heroVu = false;
+    const io = new IntersectionObserver(es => es.forEach(e => { e.isIntersecting ? vus.add(e.target) : vus.delete(e.target); maj(); }));
+    caches.forEach(c => io.observe(c));
+    maj();
   }
 
   /* ---------- Témoignage recto verso ---------- */
@@ -788,6 +821,7 @@
   function boot() {
     safe('reveals', reveals);
     safe('hscroll', hscroll);
+    safe('mbar', mbar);
     if (page === 'index') safe('home', homeScenes);
     if (page === 'design-graphique') safe('design', designScenes);
     if (page === 'evenementiel' || page === 'agence') safe('events', eventScenes);

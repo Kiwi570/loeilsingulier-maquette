@@ -1,0 +1,613 @@
+{
+  "_note": "Médias du site. src = chemin relatif dans le dossier PHOTOS fourni par la cliente (originaux non versionnés). Les textes alternatifs décrivent seulement ce qui est visible : aucun lieu, date ou commanditaire n'est déduit des noms de fichiers. focal = point focal (object-position). widths = largeurs générées (plafonnées à l'original).",
+  "photos": [
+    {
+      "id": "portrait-elena",
+      "src": "ElenaDeliotportrait.png",
+      "cat": "portrait",
+      "focal": "50% 30%",
+      "widths": [
+        480,
+        800,
+        1086
+      ],
+      "fr": "Portrait en noir et blanc d’Eléna Déliot, souriante, à son bureau",
+      "en": "Black-and-white portrait of Eléna Déliot smiling at her desk"
+    },
+    {
+      "id": "musiciens-jardin",
+      "src": "Event/0626-06605.jpg",
+      "cat": "musique",
+      "focal": "50% 55%",
+      "fr": "Musiciens jouant en plein air sous les arbres",
+      "en": "Musicians playing outdoors beneath the trees"
+    },
+    {
+      "id": "cocktails-fleurs",
+      "src": "Event/0626-06704.jpg",
+      "cat": "tables",
+      "focal": "50% 60%",
+      "fr": "Deux cocktails sur une table fleurie",
+      "en": "Two cocktails on a flower-decked table"
+    },
+    {
+      "id": "couloir-blanc",
+      "src": "Event/0626-06782.jpg",
+      "cat": "details",
+      "focal": "50% 50%",
+      "fr": "Silhouette en robe blanche au bout d’un couloir blanc",
+      "en": "A figure in a white dress at the end of a white corridor"
+    },
+    {
+      "id": "chef-bols",
+      "src": "Event/0626-06861.jpg",
+      "cat": "tables",
+      "focal": "40% 50%",
+      "fr": "Main gantée d’un chef dressant de petits bols",
+      "en": "A chef’s gloved hand plating small bowls"
+    },
+    {
+      "id": "hall-escalier",
+      "src": "Event/0626-07116.jpg",
+      "cat": "lieux",
+      "focal": "50% 50%",
+      "fr": "Hall à double escalier en fer forgé sous un plafond mouluré",
+      "en": "Entrance hall with a wrought-iron double staircase and moulded ceiling"
+    },
+    {
+      "id": "verre-fumant",
+      "src": "Event/2024-00229.jpg",
+      "cat": "tables",
+      "focal": "45% 55%",
+      "fr": "Invitée tenant un verre d’où s’échappe une fumée blanche",
+      "en": "A guest holding a glass trailing white vapour"
+    },
+    {
+      "id": "nef-arcades",
+      "src": "Event/2026-01968_websize.jpg",
+      "cat": "lieux",
+      "focal": "50% 50%",
+      "fr": "Grande nef sous verrière, arcades éclairées d’orange",
+      "en": "A great glass-roofed nave with arches lit in amber"
+    },
+    {
+      "id": "tente-rose",
+      "src": "Event/2685.jpg",
+      "cat": "tables",
+      "focal": "50% 60%",
+      "fr": "Chef sous une tente éclairée de rose et de violet",
+      "en": "A chef beneath a tent lit in pink and violet"
+    },
+    {
+      "id": "salon-lustres",
+      "src": "Event/3580.jpg",
+      "cat": "lieux",
+      "focal": "50% 50%",
+      "fr": "Salon blanc à lustres préparé pour une réception",
+      "en": "A white salon with chandeliers set for a reception"
+    },
+    {
+      "id": "buffet-glace",
+      "src": "Event/4260.jpg",
+      "cat": "tables",
+      "focal": "50% 50%",
+      "fr": "Cheffe servant derrière un buffet de glace",
+      "en": "A chef serving from behind an ice buffet"
+    },
+    {
+      "id": "facade-projection",
+      "src": "Event/6327a82d-7b2f-4545-a904-d3899cfad68b.jpg",
+      "cat": "scene",
+      "focal": "50% 50%",
+      "fr": "Façade illuminée par une projection colorée et reflétée dans l’eau",
+      "en": "A façade lit by a colourful projection and reflected in the water"
+    },
+    {
+      "id": "coupole-damier",
+      "src": "Event/6D6B56EB-C3DF-4161-87C0-530FB083654A_1_201_a.heic",
+      "cat": "lieux",
+      "focal": "50% 40%",
+      "widths": [
+        480,
+        960,
+        1440,
+        1920
+      ],
+      "fr": "Coupole baroque au-dessus d’un sol en damier",
+      "en": "A baroque dome above a chequered floor"
+    },
+    {
+      "id": "atrium-vert",
+      "src": "Event/Atrium événementiel baigné de vert.png",
+      "cat": "lieux",
+      "focal": "50% 50%",
+      "fr": "Atrium baigné de lumière verte, vu d’en haut",
+      "en": "An atrium bathed in green light, seen from above"
+    },
+    {
+      "id": "salle-ovale",
+      "src": "Event/BNF-5010.jpg",
+      "cat": "lieux",
+      "focal": "50% 45%",
+      "fr": "Salle de lecture ovale sous une verrière percée d’oculi",
+      "en": "An oval reading room beneath a glass roof ringed with oculi"
+    },
+    {
+      "id": "galerie-peinte",
+      "src": "Event/Capitole 2026-08580.jpg",
+      "cat": "lieux",
+      "focal": "50% 40%",
+      "fr": "Galerie aux plafonds peints pendant une soirée",
+      "en": "A gallery with painted ceilings during an evening reception"
+    },
+    {
+      "id": "longue-table",
+      "src": "Event/DinnerParisHD (1).jpg",
+      "cat": "tables",
+      "focal": "50% 55%",
+      "fr": "Longue table dressée, bouquets et bougies",
+      "en": "A long dressed table with flowers and candles"
+    },
+    {
+      "id": "boule-facettes",
+      "src": "Event/Disco.jpg",
+      "cat": "details",
+      "focal": "50% 50%",
+      "small": true,
+      "fr": "Boule à facettes",
+      "en": "A mirror ball"
+    },
+    {
+      "id": "duo-accordeon",
+      "src": "Event/Duo musical glamour en fête.png",
+      "cat": "musique",
+      "focal": "55% 40%",
+      "fr": "Chanteuse en boa violet et accordéoniste costumé",
+      "en": "A singer in a violet boa and a costumed accordionist"
+    },
+    {
+      "id": "buste-niche",
+      "src": "Event/IMG_0110.JPG",
+      "cat": "details",
+      "focal": "50% 45%",
+      "fr": "Buste de marbre dans une niche",
+      "en": "A marble bust in a niche"
+    },
+    {
+      "id": "console-scene",
+      "src": "Event/IMG_1051.jpeg",
+      "cat": "scene",
+      "focal": "50% 60%",
+      "fr": "Console de mixage sous les projecteurs rouges",
+      "en": "A mixing desk beneath red stage lights"
+    },
+    {
+      "id": "nef-globe",
+      "src": "Event/IMG_1170.jpeg",
+      "cat": "lieux",
+      "focal": "60% 40%",
+      "fr": "Globe terrestre suspendu dans une nef gothique",
+      "en": "A globe suspended in a Gothic nave"
+    },
+    {
+      "id": "statuette-livres",
+      "src": "Event/IMG_1230.jpg",
+      "cat": "details",
+      "focal": "50% 55%",
+      "fr": "Statuette blanche entre des rayonnages de livres reliés",
+      "en": "A white statuette between shelves of bound books"
+    },
+    {
+      "id": "etiquette-vin",
+      "src": "Event/IMG_1985 (1).jpg",
+      "cat": "details",
+      "focal": "50% 40%",
+      "fr": "Étiquette d’un grand vin de 1976",
+      "en": "The label of a 1976 fine wine"
+    },
+    {
+      "id": "acrobate",
+      "src": "Event/IMG_2305.jpeg",
+      "cat": "scene",
+      "focal": "50% 50%",
+      "fr": "Acrobate aérienne dans un faisceau de lumière",
+      "en": "An aerial acrobat in a beam of light"
+    },
+    {
+      "id": "salon-lanternes",
+      "src": "Event/IMG_3964.jpeg",
+      "cat": "lieux",
+      "focal": "50% 45%",
+      "widths": [
+        480,
+        960,
+        1440,
+        1920
+      ],
+      "fr": "Salon aux fauteuils rouges, céramiques turquoise et lanternes rouges",
+      "en": "A salon with red armchairs, turquoise ceramics and red lanterns"
+    },
+    {
+      "id": "coeurs-facettes",
+      "src": "Event/IMG_4127.jpeg",
+      "cat": "details",
+      "focal": "50% 55%",
+      "fr": "Boules à facettes en forme de cœur",
+      "en": "Heart-shaped mirror balls"
+    },
+    {
+      "id": "lasers",
+      "src": "Event/IMG_5373.jpg",
+      "cat": "scene",
+      "focal": "50% 50%",
+      "fr": "Lasers et écrans pendant un spectacle",
+      "en": "Lasers and screens during a show"
+    },
+    {
+      "id": "chapiteaux",
+      "src": "Event/IMG_5739.jpg",
+      "cat": "lieux",
+      "focal": "50% 50%",
+      "small": true,
+      "fr": "Chapiteaux sculptés et lanternes colorées",
+      "en": "Carved capitals and coloured lanterns"
+    },
+    {
+      "id": "danseuses-lustre",
+      "src": "Event/IMG_5983.jpeg",
+      "cat": "scene",
+      "focal": "50% 50%",
+      "fr": "Danseuses à plumes sous un lustre de cristal",
+      "en": "Feathered dancers beneath a crystal chandelier"
+    },
+    {
+      "id": "panneaux-fleuris",
+      "src": "Event/IMG_6460.jpg",
+      "cat": "details",
+      "focal": "50% 60%",
+      "fr": "Panneaux fléchés peints à la main dans un feuillage fleuri",
+      "en": "Hand-painted signposts in flowering foliage"
+    },
+    {
+      "id": "faisceaux-bleus",
+      "src": "Event/IMG_6497.jpeg",
+      "cat": "scene",
+      "focal": "50% 50%",
+      "fr": "Faisceaux de lumière au-dessus du public",
+      "en": "Beams of light above an audience"
+    },
+    {
+      "id": "table-ambre",
+      "src": "Event/IMG_7707.jpeg",
+      "cat": "tables",
+      "focal": "45% 55%",
+      "widths": [
+        480,
+        800,
+        1200,
+        1600,
+        2000
+      ],
+      "fr": "Table dressée dans un salon doré baigné de lumière ambrée",
+      "en": "A table laid in a gilded salon bathed in amber light"
+    },
+    {
+      "id": "club-jazz",
+      "src": "Event/IMG_8887.jpeg",
+      "cat": "musique",
+      "focal": "50% 45%",
+      "fr": "Scène de club de jazz sous la lumière bleue et un lustre rouge",
+      "en": "A jazz club stage under blue light and a red chandelier"
+    },
+    {
+      "id": "platine-vinyle",
+      "src": "Event/IMG_9526.jpeg",
+      "cat": "details",
+      "focal": "50% 55%",
+      "widths": [
+        480,
+        960,
+        1440
+      ],
+      "fr": "Platine vinyle en noir et blanc",
+      "en": "A turntable in black and white"
+    },
+    {
+      "id": "bar-flammes",
+      "src": "Event/LR-7791.jpg",
+      "cat": "scene",
+      "focal": "50% 50%",
+      "fr": "Bar de flammes et artiste costumé",
+      "en": "A flaming bar and a costumed performer"
+    },
+    {
+      "id": "artiste-porte",
+      "src": "Event/LR-8101.jpg",
+      "cat": "scene",
+      "focal": "50% 55%",
+      "fr": "Artiste costumé franchissant une porte éclairée de violet",
+      "en": "A costumed performer stepping through a violet-lit doorway"
+    },
+    {
+      "id": "ailes-lumineuses",
+      "src": "Event/LR-8255.jpg",
+      "cat": "scene",
+      "focal": "50% 45%",
+      "fr": "Artiste aux ailes lumineuses",
+      "en": "A performer with illuminated wings"
+    },
+    {
+      "id": "salle-fauteuils",
+      "src": "Event/London-5902.jpg",
+      "cat": "lieux",
+      "focal": "50% 55%",
+      "fr": "Salle aménagée de fauteuils et de tables basses sous les projecteurs",
+      "en": "A room set with armchairs and low tables under spotlights"
+    },
+    {
+      "id": "guitaristes",
+      "src": "Event/Musique.jpeg",
+      "cat": "musique",
+      "focal": "50% 50%",
+      "fr": "Guitaristes jouant en plein air",
+      "en": "Guitarists playing outdoors"
+    },
+    {
+      "id": "musicien-lumiere",
+      "src": "Event/Musique1.JPG",
+      "cat": "musique",
+      "focal": "60% 45%",
+      "fr": "Musicien en contre-jour dans les lumières de scène",
+      "en": "A musician silhouetted in stage lights"
+    },
+    {
+      "id": "salle-voutee",
+      "src": "Event/Projet__1838.jpg",
+      "cat": "lieux",
+      "focal": "50% 55%",
+      "fr": "Salle voûtée éclairée aux bougies",
+      "en": "A vaulted hall lit by candles"
+    },
+    {
+      "id": "chefs-buche",
+      "src": "Event/Projet__1909.jpg",
+      "cat": "tables",
+      "focal": "50% 50%",
+      "fr": "Chefs derrière une longue bûche pâtissière",
+      "en": "Chefs behind a long pastry log"
+    },
+    {
+      "id": "soprano-cuivres",
+      "src": "Event/Soprano.jpg",
+      "cat": "musique",
+      "focal": "50% 50%",
+      "fr": "Soprano en robe rose accompagnée d’un ensemble de cuivres",
+      "en": "A soprano in pink with a brass ensemble"
+    },
+    {
+      "id": "colonnade-lanternes",
+      "src": "Event/Toulouse.jpg",
+      "cat": "lieux",
+      "focal": "50% 50%",
+      "small": true,
+      "fr": "Colonnade aux lanternes suspendues",
+      "en": "A colonnade hung with lanterns"
+    },
+    {
+      "id": "rideau-rouge",
+      "src": "Event/Zedel.jpg",
+      "cat": "musique",
+      "focal": "50% 45%",
+      "fr": "Chanteuse devant un rideau rouge, près d’un piano",
+      "en": "A singer before a red curtain beside a piano"
+    },
+    {
+      "id": "pianiste-bleu",
+      "src": "Event/_LEF8310.jpg",
+      "cat": "musique",
+      "focal": "65% 50%",
+      "widths": [
+        480,
+        960,
+        1440,
+        1920
+      ],
+      "fr": "Pianiste sur scène dans une lumière bleue",
+      "en": "A pianist on stage in blue light"
+    },
+    {
+      "id": "rotonde-coupole",
+      "src": "Event/bourse.jpg",
+      "cat": "lieux",
+      "focal": "50% 45%",
+      "widths": [
+        480,
+        960,
+        1440,
+        1772
+      ],
+      "fr": "Rotonde sous une coupole vitrée et une fresque panoramique",
+      "en": "A rotunda beneath a glass dome and a panoramic fresco"
+    },
+    {
+      "id": "coupole-beton",
+      "src": "Event/bourse1.jpg",
+      "cat": "lieux",
+      "focal": "50% 40%",
+      "fr": "Coupole vue d’en bas, entre béton et fresque",
+      "en": "A dome seen from below, between concrete and fresco"
+    },
+    {
+      "id": "machine-volante",
+      "src": "Event/clementader (1).jpg",
+      "cat": "details",
+      "focal": "50% 45%",
+      "fr": "Machine volante ancienne suspendue sous une voûte sculptée",
+      "en": "An early flying machine suspended beneath a carved vault"
+    },
+    {
+      "id": "amphitheatre",
+      "src": "Event/conférence.jpg",
+      "cat": "lieux",
+      "focal": "50% 50%",
+      "fr": "Amphithéâtre éclairé de violet pendant une conférence",
+      "en": "A lecture theatre lit in violet during a conference"
+    },
+    {
+      "id": "bar-glace",
+      "src": "Event/ice.jpg",
+      "cat": "tables",
+      "focal": "50% 50%",
+      "fr": "Bar dans la pénombre et sculpture de glace",
+      "en": "A dimly lit bar and an ice sculpture"
+    },
+    {
+      "id": "plafond-dore",
+      "src": "Event/lieu.jpg",
+      "cat": "lieux",
+      "focal": "50% 50%",
+      "fr": "Plafond doré et peint, vu en contre-plongée",
+      "en": "A gilded, painted ceiling seen from below"
+    },
+    {
+      "id": "saxophoniste",
+      "src": "Event/saxophonist (1).jpg",
+      "cat": "musique",
+      "focal": "50% 40%",
+      "fr": "Saxophoniste pendant une soirée",
+      "en": "A saxophonist during an evening reception"
+    }
+  ],
+  "design": [
+    {
+      "id": "papeterie",
+      "src": "Graphisme/elena-mockup.jpeg",
+      "q": 88,
+      "fr": "Papeterie de l’œil singulier",
+      "en": "l’œil singulier stationery"
+    },
+    {
+      "id": "decoupe-laser-gif",
+      "src": "Graphisme/32_dsc0191.gif",
+      "frames": true,
+      "q": 88,
+      "fr": "Invitation en découpe laser : l’ouverture en trois temps",
+      "en": "Laser-cut invitation: opening in three steps"
+    },
+    {
+      "id": "decoupe-laser",
+      "src": "Graphisme/invitation.jpg",
+      "q": 88,
+      "fr": "Invitation en découpe laser, dépliée",
+      "en": "Laser-cut invitation, unfolded"
+    },
+    {
+      "id": "spring-party",
+      "src": "Graphisme/Spring Party.jpg",
+      "q": 88,
+      "fr": "Invitation « Spring party »",
+      "en": "“Spring party” invitation"
+    },
+    {
+      "id": "art-du-sourire",
+      "src": "Graphisme/test08_page-0001.jpg",
+      "q": 88,
+      "fr": "Invitation « L’art du sourire »",
+      "en": "“L’art du sourire” invitation"
+    },
+    {
+      "id": "art-du-sourire-flyers",
+      "src": "Graphisme/A6 Flyer Postcard Mock-Up-3.jpg",
+      "q": 86,
+      "fr": "« L’art du sourire », cartes A6",
+      "en": "“L’art du sourire”, A6 cards"
+    },
+    {
+      "id": "invitation-tour",
+      "src": "Graphisme/Eiffel.png",
+      "q": 88,
+      "fr": "Invitation : la tour Eiffel en contre-plongée",
+      "en": "Invitation: the Eiffel Tower seen from below"
+    },
+    {
+      "id": "invitation-degrade",
+      "src": "Graphisme/Barnabelinvitation.jpg",
+      "q": 86,
+      "fr": "Invitation pliée aux dégradés rose et violet",
+      "en": "Folded invitation in pink and violet gradients"
+    },
+    {
+      "id": "carte-verriere",
+      "src": "Graphisme/36_dsc2246-copie.jpg",
+      "q": 88,
+      "fr": "Carte pliée illustrée d’une verrière",
+      "en": "Folded card illustrated with a glass roof"
+    },
+    {
+      "id": "evolution-beyond-digital",
+      "src": "Graphisme/36_dsc2248-copie.jpg",
+      "q": 88,
+      "fr": "Carte « Evolution beyond digital » aux carrés irisés",
+      "en": "“Evolution beyond digital” card with iridescent squares"
+    },
+    {
+      "id": "livre-150",
+      "src": "Graphisme/téléchargement_edited.jpg",
+      "q": 88,
+      "fr": "Livre « 150 » à couverture bleue",
+      "en": "“150” book with a blue cover"
+    },
+    {
+      "id": "voeux-2017-cerf",
+      "src": "Graphisme/Oeil Singulier 2017.jpg",
+      "q": 88,
+      "fr": "Carte de vœux 2017 de l’œil singulier, cerf illustré",
+      "en": "l’œil singulier 2017 greetings card with an illustrated stag"
+    },
+    {
+      "id": "voeux-2018-oeil",
+      "src": "Graphisme/Oeil Singulier december 2017.jpg",
+      "q": 88,
+      "fr": "Carte de vœux « Keep an eye on your dreams for 2018 »",
+      "en": "“Keep an eye on your dreams for 2018” greetings card"
+    },
+    {
+      "id": "voeux-2017-coq",
+      "src": "Graphisme/Voeux2017.jpg",
+      "q": 90,
+      "small": true,
+      "fr": "Carte de vœux 2017, plumage de coq",
+      "en": "2017 greetings card with a rooster’s plumage"
+    },
+    {
+      "id": "voeux-2021-oeil",
+      "src": "Graphisme/carte de voeux email 02.jpg",
+      "q": 88,
+      "fr": "Carte de vœux 2021, œil doré",
+      "en": "2021 greetings card with a golden eye"
+    },
+    {
+      "id": "voeux-2021-papier",
+      "src": "Graphisme/carteB.jpg",
+      "q": 88,
+      "fr": "Carte de vœux 2021 en papier découpé",
+      "en": "2021 greetings card in cut paper"
+    }
+  ],
+  "son": [
+    {
+      "id": "carte-festive",
+      "src": "(PDF Square print, page 1, rendu à 300 dpi)",
+      "fr": "Illustration de la sélection festive : danseuse, disque rouge et serpentins dorés, par Dean Dorat",
+      "en": "Artwork for the party selection: a dancer, a red record and golden streamers, by Dean Dorat",
+      "gen": {
+        "w": 1182,
+        "h": 1182,
+        "widths": [
+          600,
+          1182
+        ]
+      }
+    }
+  ]
+}

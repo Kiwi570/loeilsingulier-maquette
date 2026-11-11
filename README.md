@@ -1,31 +1,54 @@
-# L'Œil Singulier · maquette v3
+# l’œil singulier · maquette (direction « Clair-obscur »)
 
-Maquette du futur site de L'Œil Singulier (événementiel et design graphique, Paris et Londres).
-Direction artistique « Le Carton d'invitation » : papier coton ivoire, encre bleu nuit, dorure or pâle.
+Maquette du futur site de l’œil singulier : événementiel et design graphique, Paris et Londres.
+Encre, crème, rouge profond et quelques touches de doré mat ; textes FR / EN fournis par la cliente en novembre 2026.
 
-Site statique HTML, CSS et JavaScript, sans étape de construction, prêt pour Vercel (`vercel.json`, `cleanUrls`).
+Site statique multipage, sans framework. Un petit générateur Node (aucune dépendance) assemble les pages dans `public/`, que Vercel publie (`vercel.json`).
+
+## Commandes
+
+```bash
+node tools/build.mjs
+```
+
+```bash
+npx serve public -l 4173
+```
+
+```bash
+node tools/verifier.mjs
+```
+
+Tests navigateur (Playwright requis, avec le serveur local lancé) :
+
+```bash
+node tools/test-navigateur.cjs http://localhost:4173
+```
+
+Dérivés d’images à partir des originaux de la cliente (non versionnés ; Pillow ≥ 11 et pillow-heif) :
+
+```bash
+python3 -I tools/images.py /chemin/vers/PHOTOS
+```
+
+## Organisation
+
+| Dossier | Contenu |
+|---|---|
+| `src/site.mjs` | gabarit commun : en-tête, menu, pied de page, carte, R.S.V.P., aides bilingues et images |
+| `src/pages/` | une page par fichier, textes FR et EN côte à côte |
+| `src/data/photos.json` | sélection des photos, textes alternatifs FR / EN, points focaux |
+| `content/journal/` | articles du journal en Markdown (voir `LISEZMOI.md`) |
+| `static/` | CSS, JS, polices, images dérivées (copiés tels quels dans `public/`) |
+| `tools/` | génération, images, contrôles |
+| `docs/` | compte rendu, son et QR codes |
 
 ## Pages
 
-| Fichier | Contenu |
-|---|---|
-| `index.html` | Accueil : décachetage, titre doré en WebGL, savoir-faire, triple promesse, plan de table, galerie, design graphique, références, Paris ⇄ Londres, R.S.V.P. |
-| `evenementiel.html` | Rôle, savoir-faire, déroulé d'un projet (à valider), équipe, objectifs, témoignage |
-| `design-graphique.html` | 22 réalisations au format réel, loupe, visionneuse avec zoom |
-| `galerie.html` | Planche contact et 55 photos d'événements |
-| `agence.html` | Parcours d'Elena Deliot, emblème, métiers |
-| `references.html` | 30 références par secteur, 6 témoignages (original et traduction) |
-| `son.html` | Ambiance sonore composée en direct (Web Audio), deux playlists |
-| `contact.html` | Carton-réponse en 4 étapes (envoi simulé), coordonnées, horloges |
-| `mentions-legales.html` | Mentions légales et confidentialité (champs à compléter) |
-| `404.html` | Page introuvable |
-
-## Bibliothèques hébergées avec le site
-
-GSAP 3.15 (ScrollTrigger, SplitText), Lenis 1.3, OGL (dorure WebGL). Polices Bodoni Moda (coupes renforcées pour la lecture) et Hanken Grotesk (SIL Open Font License).
+Accueil, Événementiel, Design graphique, Galerie, L’agence, Références, Le son, Journal, Contact, Mentions légales, 404, ainsi que `/playlist` et `/playlistparis` (adresses des QR codes déjà imprimés : ne pas les renommer).
 
 ## Accessibilité et préférences
 
-Français et anglais (bouton FR / EN), son jamais automatique, bouton « Calme » qui coupe le mouvement (activé d'office si le système demande de réduire les animations), version sans WebGL, navigation au clavier.
+Bouton FR / EN sans rechargement (la page et le formulaire gardent leur état ; `?lang=en` force l’anglais), mode « Calme » activé d’office si le système demande de réduire les animations, navigation au clavier, aucun son automatique.
 
-Les éléments marqués « à compléter » ou « à valider » attendent une confirmation de la cliente.
+Les points à fournir ou à valider sont listés dans `docs/compte-rendu.md`.

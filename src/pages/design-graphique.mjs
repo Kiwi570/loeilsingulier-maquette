@@ -1,7 +1,7 @@
 // Design graphique : rubrique 11, réalisations du dossier Graphisme (proportions d'origine, aucun recadrage).
 import { t, tb, paras, label, btn, pic, photosBy, lbAttrs, frameSrc, rsvpBand, nextPage, attr } from '../site.mjs';
 
-const works = photosBy('design').filter(p => !p.gen.frames);
+const works = photosBy('design').filter(p => !p.gen.frames && p.id !== 'papeterie'); // la papeterie ouvre déjà la page
 const gif = frameSrc('decoupe-laser-gif', 1);
 const frames = [1, 2, 3].map(k => frameSrc('decoupe-laser-gif', k));
 const stepFr = ['Fermée', 'À demi ouverte', 'Ouverte'], stepEn = ['Closed', 'Half open', 'Open'];

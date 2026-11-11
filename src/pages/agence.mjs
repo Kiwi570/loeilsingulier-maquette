@@ -13,7 +13,7 @@ const BIO = [
   { fr: 'J’adore cuisiner pour mes proches, réunir des amis autour d’une belle table et partager une bonne bouteille. Et j’aime encore davantage offrir que recevoir : imaginer la petite attention qui fera vraiment plaisir. Le plaisir de faire plaisir, tout simplement.',
     en: 'I love cooking for those closest to me, bringing friends together around a beautiful table and sharing a good bottle of wine. And I enjoy giving presents even more than receiving them: finding that thoughtful little something that will make someone truly happy. The pleasure of giving pleasure, quite simply.', img: 'longue-table' },
   { fr: 'Après un parcours dans l’hôtellerie, la restauration et près de quinze ans dans l’événementiel et les relations publiques au sein d’un cabinet d’avocats international, j’ai acquis une connaissance de l’intérieur de cet univers exigeant. J’ai fondé l’œil singulier en 2012 : une agence indépendante, à taille humaine, où exigence et créativité vont de pair avec une approche bienveillante et profondément humaine.',
-    en: 'After a career in hospitality and catering, followed by nearly fifteen years in events and public relations at an international law firm, I gained first-hand insight into this demanding professional world. I founded l’œil singulier in 2012: an independent, boutique agency where high standards and creativity go hand in hand with a genuinely thoughtful, personal approach.', mark: '2012' },
+    en: 'After a career in hospitality and catering, followed by nearly fifteen years in events and public relations at an international law firm, I gained first-hand insight into this demanding professional world. I founded l’œil singulier in 2012: an independent, boutique agency where high standards and creativity go hand in hand with a genuinely thoughtful, personal approach.' },
   { fr: 'Aujourd’hui, j’imagine et orchestre des événements à Paris, à Londres et ailleurs, entourée de partenaires qui partagent ma passion des belles expériences.',
     en: 'Today, I create and orchestrate events in Paris, London and beyond, working alongside partners who share my passion for exceptional experiences.' }
 ];
@@ -37,7 +37,7 @@ ${eye('portrait__eye')}
 
 <section class="sec s-cream bio" aria-label="Biographie" data-aria-en="Biography" style="padding-top:0"><div class="wrap">
 ${BIO.map((b, i) => `<div class="bio__row${b.img ? ' has-img' : ''}${i % 2 ? ' is-alt' : ''}" data-rise>
-<span class="bio__n num" aria-hidden="true">${b.mark || ['I', 'II', 'III', 'IV', 'V', 'VI'][i]}</span>
+<span class="bio__n num" aria-hidden="true">${['I', 'II', 'III', 'IV', 'V', 'VI'][i]}</span>
 ${tb('p', b.fr, b.en, i === 0 ? 'bio__p bio__p--first' : 'bio__p')}
 ${b.img ? `<div class="bio__img">${fig(b.img, { ratio: '4 / 5', sizes: '(min-width: 900px) 22vw, 60vw' })}</div>` : ''}
 </div>`).join('')}

@@ -128,8 +128,16 @@ export const nextPage = (slug, fr, en, img) => `
 <span class="next__t">${t(fr, en)}<svg class="next__arr" viewBox="0 0 60 18" aria-hidden="true" focusable="false"><path d="M0 9h56M48 1l8 8-8 8" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span></div>
 ${img ? `<div class="next__img" aria-hidden="true">${pic(img, { sizes: '40vw', alt: false })}</div>` : ''}</a></nav>`;
 
+/* ---------- Typographie française : espace insécable avant : ; ! ? » et après « (texte seulement) ---------- */
+const NB = '\u00A0', NNB = '\u202F';
+export function frenchSpacing(html) {
+  return html.split(/(<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>)/).map((part, i) => i % 2 ? part : part.replace(/>([^<]+)</g, (m, txt) => '>' + txt
+    .replace(/ ([;!?])/g, NNB + '$1').replace(/ :(?=\s|$)/g, NB + ':').replace(/« /g, '«' + NB).replace(/ »/g, NB + '»') + '<')).join('');
+}
+
 /* ---------- Gabarit complet ---------- */
-export function layout(pg) {
+export function layout(pg) { return frenchSpacing(layoutRaw(pg)); }
+function layoutRaw(pg) {
   const title = { fr: pg.title.fr, en: pg.title.en };
   const desc = pg.desc;
   const canon = SITE_URL + (pg.path || href(pg.slug));

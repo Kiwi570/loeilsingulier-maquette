@@ -67,7 +67,7 @@ ${STEPS.map((s, i) => `<li class="step" data-step-i="${i}"><span class="step__n 
 </ol>
 </div></section>
 
-<section class="sec s-red talents" aria-labelledby="tal-t"><div class="wrap talents__grid">
+<section class="sec s-paper talents" aria-labelledby="tal-t"><div class="wrap talents__grid">
 <div class="talents__txt">
 ${label('Les talents', 'Our talent')}
 <h2 class="h2" id="tal-t" data-press>${t('Une équipe <em>sur mesure</em>', 'A <em>bespoke</em> team')}</h2>

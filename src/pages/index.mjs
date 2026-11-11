@@ -23,7 +23,7 @@ ${tb('p', 'L’art de recevoir, notre métier.', 'The art of hosting is our craf
 <div class="hero__media">
 <figure class="ph hero__ph" style="aspect-ratio:3 / 4">${pic('table-ambre', { sizes: '(min-width: 960px) 40vw, 100vw', eager: true })}</figure>
 <div class="hero__eye" data-eye>${eye()}</div>
-<p class="hero__since"><span class="num">2012</span>${t('depuis', 'since')}</p>
+<p class="hero__since">${t('Depuis', 'Since')} <span class="num">2012</span></p>
 </div>
 </div>
 <div class="scroll-hint" aria-hidden="true"><i></i></div>
